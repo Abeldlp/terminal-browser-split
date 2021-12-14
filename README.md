@@ -1,117 +1,177 @@
-![](https://assets.vercel.com/image/upload/v1549723846/repositories/hyper/hyper-3-repo-banner.png)
+## Terminal split browser
 
-<p align="center">
-  <a aria-label="Vercel logo" href="https://vercel.com">
-    <img src="https://img.shields.io/badge/MADE%20BY%20Vercel-000000.svg?style=for-the-badge&logo=vercel&labelColor=000000&logoWidth=20">
-  </a>
- </p>
-  
-[![Node CI](https://github.com/vercel/hyper/workflows/Node%20CI/badge.svg?event=push)](https://github.com/vercel/hyper/actions?query=workflow%3A%22Node+CI%22+branch%3Acanary+event%3Apush)
-[![Changelog #213](https://img.shields.io/badge/changelog-%23213-lightgrey.svg)](https://changelog.com/213)
+- Personal development environment on which you can display a web browser on the terminal with a split view, so you can code in one side and render the results on the other
 
-For more details, head to: https://hyper.is
+NOTE: Adding the followin function to local .bashrc/.zshrc
 
-## Project goals
+- Function to start the terminal session
+```
+devscreen(){
+    CURRENT="$(pwd)"
+    cd ~/Projects/hyper
+    yarn run dev > /dev/null 2>&1 &
+    yarn run app > /dev/null 2>&1 &
+    cd ${CURRENT}
+}
 
-The goal of the project is to create a beautiful and extensible experience for command-line interface users, built on open web standards. In the beginning, our focus will be primarily around speed, stability and the development of the correct API for extension authors.
-
-In the future, we anticipate the community will come up with innovative additions to enhance what could be the simplest, most powerful and well-tested interface for productivity.
-
-## Usage
-
-[Download the latest release!](https://hyper.is/#installation)
-
-### Linux
-#### Arch and derivatives
-Hyper is available in the [AUR](https://aur.archlinux.org/packages/hyper/). Use an AUR [package manager](https://wiki.archlinux.org/index.php/AUR_helpers) e.g. [paru](https://github.com/Morganamilo/paru)
-
-```sh
-paru -S hyper
 ```
 
-#### NixOS
-Hyper is available as [Nix package](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/misc/hyper/default.nix), to install the app run this command:
+- Function to stop the background jobs
+```
+alias devkill="kill \$(jobs -p) > /dev/null 2>&1"
 
-```sh
-nix-env -i hyper
 ```
 
-### macOS
+Adding a .hyper.js file to home directory with following settings
 
-Use [Homebrew Cask](https://brew.sh) to download the app by running these commands:
+'use strict';
+// Future versions of Hyper may add additional config options,
+// which will not automatically be merged into this file.
+// See https://hyper.is#cfg for all currently supported options.
+module.exports = {
+  config: {
+    // choose either `'stable'` for receiving highly polished,
+    // or `'canary'` for less polished but more frequent updates
+    updateChannel: 'stable',
+    // default font size in pixels for all tabs
+    fontSize: 13,
+    // font family with optional fallbacks
+    fontFamily:
+      '"BitstreamVeraSansMono NF", "Hack", "SFMono Nerd Font", "SF Mono", Menlo, "DejaVu Sans Mono", Consolas, "Lucida Console", monospace',
+    // default font weight: 'normal' or 'bold'
+    fontWeight: 'normal',
+    // font weight for bold characters: 'normal' or 'bold'
+    fontWeightBold: 'normal',
+    // line height as a relative unit
+    lineHeight: 1,
+    // letter spacing as a relative unit
+    letterSpacing: 0,
+    // terminal cursor background color and opacity (hex, rgb, hsl, hsv, hwb or cmyk)
+    cursorColor: '#ffffff',
 
-```bash
-brew update
-brew install --cask hyper
-```
+    titleBarStyle: 'hidden',
+    // terminal text color under BLOCK cursor
+    cursorAccentColor: '#000',
+    // `'BEAM'` for |, `'UNDERLINE'` for _, `'BLOCK'` for █
+    cursorShape: 'BLOCK',
+    // set to `true` (without backticks and without quotes) for blinking cursor
+    cursorBlink: false,
+    // color of the text
+    foregroundColor: '#fff',
+    // terminal background color
+    backgroundColor: '#757F95',
+    // terminal selection color
+    selectionColor: 'rgba(248,28,229,0.3)',
+    // border color (window, tabs)
+    //borderColor: '#333',
+    // custom CSS to embed in the main window
+    css: '',
+    // custom CSS to embed in the terminal window
+    termCSS: '',
+    // set custom startup directory (must be an absolute path)
+    workingDirectory: '',
+    // if you're using a Linux setup which show native menus, set to false
+    // default: `true` on Linux, `true` on Windows, ignored on macOS
+    showHamburgerMenu: '',
+    // set to `false` (without backticks and without quotes) if you want to hide the minimize, maximize and close buttons
+    // additionally, set to `'left'` if you want them on the left, like in Ubuntu
+    // default: `true` (without backticks and without quotes) on Windows and Linux, ignored on macOS
+    showWindowControls: '',
+    // custom padding (CSS format, i.e.: `top right bottom left`)
+    padding: '12px 14px',
+    // the full list. if you're going to provide the full color palette,
+    // including the 6 x 6 color cubes and the grayscale map, just provide
+    // an array here instead of a color map object
+    colors: {
+      black: '#000000',
+      red: '#C51E14',
+      green: '#1DC121',
+      yellow: '#C7C329',
+      blue: '#0A2FC4',
+      magenta: '#C839C5',
+      cyan: '#20C5C6',
+      white: '#C7C7C7',
+      lightBlack: '#686868',
+      lightRed: '#FD6F6B',
+      lightGreen: '#67F86F',
+      lightYellow: '#FFFA72',
+      lightBlue: '#6A76FB',
+      lightMagenta: '#FD7CFC',
+      lightCyan: '#68FDFE',
+      lightWhite: '#FFFFFF',
+      limeGreen: '#32CD32',
+      lightCoral: '#F08080',
+    },
+    shell: '',
+    // for setting shell arguments (i.e. for using interactive shellArgs: `['-i']`)
+    // by default `['--login']` will be used
+    shellArgs: ['--login'],
+    // for environment variables
+    env: {},
+    // Supported Options:
+    //  1. 'SOUND' -> Enables the bell as a sound
+    //  2. false: turns off the bell
+    bell: 'false',
+    // An absolute file path to a sound file on the machine.
+    // bellSoundURL: '/path/to/sound/file',
+    // if `true` (without backticks and without quotes), selected text will automatically be copied to the clipboard
+    copyOnSelect: false,
+    // if `true` (without backticks and without quotes), hyper will be set as the default protocol client for SSH
+    defaultSSHApp: true,
+    // if `true` (without backticks and without quotes), on right click selected text will be copied or pasted if no
+    // selection is present (`true` by default on Windows and disables the context menu feature)
+    quickEdit: false,
+    // choose either `'vertical'`, if you want the column mode when Option key is hold during selection (Default)
+    // or `'force'`, if you want to force selection regardless of whether the terminal is in mouse events mode
+    // (inside tmux or vim with mouse mode enabled for example).
+    macOptionSelectionMode: 'vertical',
+    // Whether to use the WebGL renderer. Set it to false to use canvas-based
+    // rendering (slower, but supports transparent backgrounds)
+    webGLRenderer: false,
+    // keypress required for weblink activation: [ctrl|alt|meta|shift]
+    // todo: does not pick up config changes automatically, need to restart terminal :/
+    webLinksActivationKey: '',
+    // if `false` (without backticks and without quotes), Hyper will use ligatures provided by some fonts
+    disableLigatures: true,
+    // set to true to disable auto updates
+    disableAutoUpdates: false,
+    // for advanced config flags please refer to https://hyper.is/#cfg
+    MaterialTheme: {
+      // Set the theme variant,
+      // OPTIONS: 'Darker', 'Palenight', 'Ocean', ''
+      theme: '',
 
-### Windows
+      // [Optional] Set the rgba() app background opacity, useful when enableVibrance is true
+      // OPTIONS: From 0.1 to 1
+      backgroundOpacity: '0.3',
 
-Use [chocolatey](https://chocolatey.org/) to install the app by running the following command (package information can be found [here](https://chocolatey.org/packages/hyper/)):
+      // [Optional] Set the accent color for the current active tab
+      accentColor: '#64FFDA',
 
-```bash
-choco install hyper
-```
+      // [Optional] Mac Only. Need restart. Enable the vibrance and blurred background
+      // OPTIONS: 'dark', 'ultra-dark', 'bright'
+      // NOTE: The backgroundOpacity should be between 0.1 and 0.9 to see the effect.
+      vibrancy: 'dark',
+    },
+  },
+  // a list of plugins to fetch and install from npm
+  // format: [@org/]project[#version]
+  // examples:
+  //   `hyperpower`
+  //   `@company/project`
+  //   `project#1.0.1`
+  plugins: ['hyper-material-theme', 'hyper-hide-title', 'hyperminimal'],
+  // in development, you can create a directory under
+  // `~/.hyper_plugins/local/` and include it here
+  // to load it and avoid it being `npm install`ed
+  localPlugins: [],
+  keymaps: {
+    // Example
+    // 'window:devtools': 'cmd+alt+o',
+  },
+};
+//# sourceMappingURL=config-default.js.map
 
-**Note:** The version available on [Homebrew Cask](https://brew.sh), [Chocolatey](https://chocolatey.org), [Snapcraft](https://snapcraft.io/store) or the [AUR](https://aur.archlinux.org) may not be the latest. Please consider downloading it from [here](https://hyper.is/#installation) if that's the case.
+- Settings must be changed to your needs
 
-## Contribute
-
-Regardless of the platform you are working on, you will need to have Yarn installed. If you have never installed Yarn before, you can find out how at: https://yarnpkg.com/en/docs/install.
-
-1. Install necessary packages:
-  * Windows
-    - Be sure to run  `yarn global add windows-build-tools` from an elevated prompt (as an administrator) to install `windows-build-tools`.
-  * macOS
-    - Once you have installed Yarn, you can skip this section!
-  * Linux (You can see [here](https://en.wikipedia.org/wiki/List_of_Linux_distributions) what your Linux is based on.)
-    - RPM-based
-        + `GraphicsMagick`
-        + `libicns-utils`
-        + `xz` (Installed by default on some distributions.)
-    - Debian-based
-        + `graphicsmagick`
-        + `icnsutils`
-        + `xz-utils`
-2. [Fork](https://help.github.com/articles/fork-a-repo/) this repository to your own GitHub account and then [clone](https://help.github.com/articles/cloning-a-repository/) it to your local device
-3. Install the dependencies: `yarn`
-4. Build the code and watch for changes: `yarn run dev`
-5. To run `hyper`
-  * `yarn run app` from another terminal tab/window/pane
-  * If you are using **Visual Studio Code**, select `Launch Hyper` in debugger configuration to launch a new Hyper instance with debugger attached.
-  * If you interrupt `yarn run dev`, you'll need to relaunch it each time you want to test something. Webpack will watch changes and will rebuild renderer code when needed (and only what have changed). You'll just have to relaunch electron by using yarn run app or VSCode launch task.
-
-To make sure that your code works in the finished application, you can generate the binaries like this:
-
-```bash
-yarn run dist
-```
-
-After that, you will see the binary in the `./dist` folder!
-
-#### Known issues that can happen during development
-
-##### Error building `node-pty`
-
-If after building during development you get an alert dialog related to `node-pty` issues,
-make sure its build process is working correctly by running `yarn run rebuild-node-pty`.
-
-If you are on macOS, this typically is related to Xcode issues (like not having agreed
-to the Terms of Service by running `sudo xcodebuild` after a fresh Xcode installation).
-
-##### Error with `c++` on macOS when running `yarn`
-
-If you are getting compiler errors when running `yarn` add the environment variable `export CXX=clang++`
-
-##### Error with `codesign` on macOS when running `yarn run dist`
-
-If you have issues in the `codesign` step when running `yarn run dist` on macOS, you can temporarily disable code signing locally by setting
-`export CSC_IDENTITY_AUTO_DISCOVERY=false` for the current terminal session.
-
-## Related Repositories
-
-- [Art](https://github.com/vercel/art/tree/master/hyper)
-- [Website](https://github.com/vercel/hyper-site)
-- [Sample Extension](https://github.com/vercel/hyperpower)
-- [Sample Theme](https://github.com/vercel/hyperyellow)
-- [Awesome Hyper](https://github.com/bnb/awesome-hyper)
+Addnig a .hyper_plugins to home directory where plugins for hyper can be added
