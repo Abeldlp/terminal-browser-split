@@ -24,6 +24,7 @@ alias devkill="kill \$(jobs -p) > /dev/null 2>&1"
 
 Adding a .hyper.js file to home directory with following settings
 
+```
 'use strict';
 // Future versions of Hyper may add additional config options,
 // which will not automatically be merged into this file.
@@ -171,6 +172,7 @@ module.exports = {
   },
 };
 //# sourceMappingURL=config-default.js.map
+```
 
 - Settings must be changed to your needs
 
